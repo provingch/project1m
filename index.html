@@ -1,394 +1,287 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>my love <3</title>
-    <style>
-        body {
-            background: #10103a;
-            margin: 0;
-            overflow-x: hidden;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escena Silueta</title>
+<style>
+  /* ===== RESET BÁSICO ===== */
+  * { box-sizing: border-box; margin:0; padding:0; }
+  * { outline: none; }
+  body { 
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; 
+    background: #000;
+  }
 
-        .main-scene {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-        }
+  /* ===== ELIMINACION DE MARGENES ===== */
+  .main-scene,
+  .text-box {
+    display:block;
+    margin:0;
+    padding:0;
+    border:0;
+  }
 
-        /* Contenedor del cielo */
-        .sky-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
+  /* ===== ESCENA ===== */
+  .main-scene {
+    width: 100%;
+    height: 100vh; /* ocupa toda la pantalla inicial */
+    position: relative;
+    background: #10103a;
+    overflow: hidden; /* para que cometas/luciérnagas queden dentro */
+  }
 
-        /* Luna */
-        .moon {
-            position: absolute;
-            top: 10%;
-            left: 15%;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle at 30% 30%, #f0f0f0, #ccc, #888);
-            border-radius: 50%;
-            box-shadow: 0 0 30px 10px rgba(255, 255, 200, 0.6),
-                        inset 0 0 10px rgba(0,0,0,0.3);
-            z-index: 5;
-        }
-        
-        /* Contenedor del suelo */
-        .ground-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 25vh;
-            z-index: 10;
-        }
+  .sky-container { 
+    position: absolute; 
+    inset: 0; 
+    pointer-events: none; 
+  }
 
-        /* Pasto animado */
-        .animated-grass {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            transform-origin: bottom;
-            animation: grass-sway 5s ease-in-out infinite;
-            z-index: 10;
-        }
+  .moon {
+    position: absolute;
+    top: 10%;
+    left: 15%;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle at 30% 30%, #f0f0f0, #ccc, #888);
+    border-radius: 50%;
+    box-shadow: 0 0 30px 10px rgba(255,255,200,0.6), inset 0 0 10px rgba(0,0,0,0.3);
+  }
 
-        .animated-grass::before {
-            content: '';
-            position: absolute;
-            bottom: 100%;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: #000;
-            clip-path: polygon(
-                0 100%, 10% 80%, 15% 95%, 20% 75%, 30% 90%, 35% 85%, 45% 98%, 50% 70%,
-                60% 92%, 65% 88%, 75% 100%, 80% 85%, 90% 95%, 100% 70%, 100% 100%
-            );
-        }
-        
-        @keyframes grass-sway {
-            0% { transform: scaleX(1) translateY(0); }
-            50% { transform: scaleX(1.01) translateY(-1px); }
-            100% { transform: scaleX(1) translateY(0); }
-        }
+  .ground-container {
+    position: absolute;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:25vh;
+  }
 
-        /* Colina */
-        .hill-top {
-            position: absolute;
-            bottom: 8vh;
-            left: 15%;
-            transform: translateX(-50%);
-            width: 300px;
-            height: 60px;
-            background: #000;
-            border-radius: 50% / 100% 100% 0 0;
-            z-index: 11;
-        }
+  .animated-grass {
+    position: absolute;
+    inset:0;
+    background:#000;
+    transform-origin: bottom;
+  }
 
-        /* Silueta de las dos personas */
-        .people-silhouette {
-            position: absolute;
-            bottom: 7vh;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 360px;
-            height: auto;
-            z-index: 12;
-        }
-        
-        /* Estrellas */
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation-name: twinkle;
-            animation-iteration-count: infinite;
-            animation-timing-function: ease-in-out;
-            animation-fill-mode: forwards;
-        }
+  .animated-grass::before {
+    content:'';
+    position:absolute;
+    bottom:100%;
+    left:0;
+    width:100%;
+    height:100px;
+    background:#000;
+    clip-path: polygon(
+      0 100%, 10% 80%, 15% 95%, 20% 75%, 30% 90%, 35% 85%, 45% 98%, 50% 70%,
+      60% 92%, 65% 88%, 75% 100%, 80% 85%, 90% 95%, 100% 70%, 100% 100%
+    );
+  }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
-        }
+  @keyframes grass-sway {
+    0%, 100% { transform: scaleX(1) translateY(0); }
+    50% { transform: scaleX(1.01) translateY(-1px); }
+  }
 
-        /* Luciérnagas */
-        .firefly {
-            position: absolute;
-            background: yellow;
-            border-radius: 50%;
-            box-shadow: 0 0 8px 2px rgba(255, 255, 0, 0.7);
-            animation-name: firefly-glow, firefly-move;
-            animation-iteration-count: infinite, infinite;
-            animation-timing-function: alternate, linear;
-            animation-fill-mode: forwards, forwards;
-        }
+  .hill-top {
+    position:absolute;
+    bottom:8vh; 
+    left:15%;
+    transform:translateX(-50%);
+    width:300px; 
+    height:60px;
+    background:#000;
+    border-radius:50%/100% 100% 0 0;
+  }
 
-        @keyframes firefly-glow {
-            0% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0.2; transform: scale(0.8); }
-        }
-        
-        /* Nuevo keyframe para el movimiento de las luciérnagas */
-        @keyframes firefly-move {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(-10px, 20px); }
-            50% { transform: translate(50px, -30px); }
-            75% { transform: translate(-40px, 15px); }
-            100% { transform: translate(0, 0); }
-        }
+  .people-silhouette {
+    position:absolute;
+    bottom:5.5vh; 
+    left:50%;
+    transform:translateX(-50%);
+    width:360px; 
+    height:auto;
+    user-select:none; 
+    -webkit-user-drag:none;
+  }
 
-        /* Cometas */
-        .comet {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8);
-            opacity: 0;
-            animation-name: shoot-comet, comet-flicker;
-            animation-iteration-count: infinite, infinite;
-            animation-timing-function: linear, linear;
-            animation-fill-mode: forwards, forwards;
-            z-index: 10;
-            transform-origin: center center;
-            filter: blur(0.5px);
-        }
+  /* ===== ESTRELLAS ===== */
+  .star { 
+    position:absolute; 
+    background:white; 
+    border-radius:50%; 
+    animation:twinkle infinite ease-in-out; 
+    opacity:0; 
+    filter:blur(0.3px); 
+  }
 
-        @keyframes comet-flicker {
-            0%, 100% { box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8); }
-            50% { box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.6); }
-        }
+  @keyframes twinkle { 
+    0%,100% { opacity:0; } 
+    50% { opacity:1; } 
+  }
 
-        .comet::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: var(--tail-length);
-            height: 4px;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 20%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
-            transform: translateY(-50%) rotateY(180deg) scaleX(1);
-            transform-origin: left center;
-            filter: blur(1.5px);
-            border-radius: 50%;
-            animation: comet-flicker linear infinite;
-        }
-        
-        @keyframes shoot-comet {
-            0% {
-                transform: translate(calc(var(--start-x) * 1vw), calc(var(--start-y) * 1vh)) rotate(var(--angle));
-                opacity: 0;
-            }
-            1% {
-                opacity: 1;
-                transform: translate(calc(var(--start-x) * 1vw), calc(var(--start-y) * 1vh)) rotate(var(--angle));
-            }
-            50% {
-                transform: translate(calc(var(--end-x) * 1vw), calc(var(--end-y) * 1vh)) rotate(var(--angle));
-                opacity: 1;
-            }
-            51% {
-                opacity: 0;
-                transform: translate(calc(var(--end-x) * 1vw), calc(var(--end-y) * 1vh)) rotate(var(--angle));
-            }
-            100% {
-                opacity: 0;
-                transform: translate(calc(var(--end-x) * 1vw), calc(var(--end-y) * 1vh)) rotate(var(--angle));
-            }
-        }
+  /* ===== LUCIÉRNAGAS ===== */
+  .firefly {
+    position:absolute; 
+    background:yellow; 
+    border-radius:50%;
+    box-shadow:0 0 8px 2px rgba(255,255,0,0.7);
+    animation-name:firefly-glow, firefly-move;
+    animation-iteration-count:infinite, infinite;
+    animation-timing-function:alternate, linear;
+    animation-fill-mode:forwards, forwards;
+    opacity:0.9; 
+    filter:blur(0.2px);
+  }
 
-        .message-container {
-            width: 100%;
-            height: 100vh;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            position: relative;
-            z-index: 2;
-        }
+  @keyframes firefly-glow { 
+    0%,100% { opacity:0.2; transform:scale(0.8); } 
+    50% { opacity:1; transform:scale(1); } 
+  }
 
-        .message-box {
-            width: 80%;
-            max-width: 600px;
-            color: white;
-            text-align: center;
-            position: relative;
-            font-family: 'Arial', sans-serif;
-            font-size: 1.5em;
-            line-height: 1.6;
-        }
-        
-        @media (max-width: 600px) {
-            .moon {
-                width: 100px;
-                height: 100px;
-                top: 15%;
-                left: 40%;
-            }
+  @keyframes firefly-move { 
+    0% { transform:translate(0,0); } 
+    25% { transform:translate(-10px,20px); } 
+    50% { transform:translate(50px,-30px); } 
+    75% { transform:translate(-40px,15px); } 
+    100% { transform:translate(0,0); } 
+  }
 
-            .hill-top {
-                width: 200px;
-                height: 40px;
-                bottom: 5vh;
-                left: 50%;
-            }
+  /* ===== COMETAS ===== */
+  .comet {
+    position:absolute; 
+    width:5px; 
+    height:5px; 
+    background:white; 
+    border-radius:50%;
+    box-shadow:0 0 15px 5px rgba(255,255,255,0.8); 
+    opacity:0;
+    animation-name:shoot-comet, comet-flicker;
+    animation-iteration-count:infinite,infinite;
+    animation-timing-function:linear,linear;
+    animation-fill-mode:forwards,forwards;
+    transform-origin:center center;
+    filter: blur(0.5px);
+  }
 
-            .people-silhouette {
-                width: 320px;
-                bottom: 10vh;
-                left: 50%;
-            }
-            .message-box {
-                font-size: 1.1em;
-            }
-        }
-    </style>
+  .comet::after {
+    content:'';
+    position:absolute;
+    top:50%; 
+    left:50%;
+    width:var(--tail-length); 
+    height:4px;
+    background:linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 20%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+    transform:translateY(-50%) rotateY(180deg) scaleX(1);
+    transform-origin:left center;
+    filter: blur(1.5px);
+    border-radius:50%;
+    animation:comet-flicker linear infinite;
+  }
+
+  /* ===== TEXTO ABAJO ===== */
+  .text-box {
+    width:100%;
+    background: rgb(0, 0, 0);
+    color:#fff;
+    padding:24px;
+    line-height:1.6;
+    font-size:16px;
+  }
+
+  .text-box .inner { 
+    max-width:900px; 
+    margin:0 auto; 
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    .moon { width:100px; height:100px; top:10%; left:40%; }
+    .hill-top { width:200px; height:40px; bottom:5vh; left:50%; transform:translateX(-50%); }
+    .people-silhouette { width:320px; bottom:7vh; left:50%; transform:translateX(-50%); }
+  }
+
+</style>
 </head>
 <body>
-    <div class="main-scene">
-        <div class="sky-container"></div>
-        <div class="moon"></div>
-        
-        <div class="ground-container">
-            <div class="animated-grass"></div>
-            <div class="hill-top"></div>
-            <img class="people-silhouette" src="personas.png" alt="Silueta de dos personas sentadas">
-        </div>
-    </div>
+<section class="main-scene" aria-label="Escena nocturna">
+  <div class="sky-container"></div>
+  <div class="moon"></div>
+  <div class="ground-container">
+    <div class="animated-grass"></div>
+    <div class="hill-top"></div>
+    <img class="people-silhouette" src="personas.png" alt="Silueta de dos personas">
+  </div>
+</section>
 
-    <div class="message-container">
-        <div class="message-box">
-            <p>Hola mi amor, te amo mucho. Eres la luna en mi cielo y las estrellas que me guían...</p>
-        </div>
-    </div>
-    
-    <script>
-        const skyContainer = document.querySelector('.sky-container');
-        const numStars = 100;
-        const numFireflies = 20;
-        const numComets = 3;
+<section class="text-box">
+  <div class="inner">
+    <h2>Mi amor,</h2>
+    <p>Gracias por estar en mi vida. Sé que un mes de novios no parece mucho, pero para mí se siente como haber vivido años enteros de felicidad condensada en cada momento a tu lado. Este tiempo que hemos compartido me ha enseñado tanto, me ha hecho descubrir partes de mí que antes no conocía: mi paciencia, mi ternura, mi capacidad de admirar sin límites. Todo eso es gracias a ti, porque tu presencia ilumina hasta los rincones más oscuros de mi corazón.</p><br>
+    <p>Me tienes completamente enamorado, no solo de ti, sino de cada gesto tuyo, cada sonrisa que ilumina tu rostro, cada mirada que me hace sentir que soy el único en tu mundo. Eres perfecta para mí en todos los sentidos: linda, hermosa, graciosa, inteligente, dulce y fuerte. Todo lo que eres y todo lo que haces me enamora más cada día. La distancia a veces me pesa, porque deseo estar cerca de ti, abrazarte, besarte, sentir tu calor, escuchar tus latidos y perderme en ellos. Cada momento lejos de ti se siente incompleto, pero cada recuerdo y cada pensamiento sobre ti me da fuerza para esperar con alegría el próximo encuentro.</p><br>
+    <p>Eres la flor en medio de un campo vasto de malañas, esa flor que se mantiene firme ante cualquier tormenta, que no se rinde y que siempre busca la luz. Y yo quiero ser ese jardinero que cuide de ti, que proteja tu esencia y tu belleza, que te acompañe en cada paso de la vida, que riegue tu corazón con amor y paciencia. Mi promesa es cuidarte, amarte y estar contigo para siempre, sin importar las dificultades que se presenten en el camino.</p><br>
+    <p>Recuerdo cada instante que hemos compartido: tus risas contagiosas que llenan de alegría cualquier lugar, tus palabras dulces que me reconfortan cuando más lo necesito, tus silencios que hablan más que mil palabras y tus gestos pequeños que demuestran un amor infinito. Cada momento contigo es un tesoro que guardo en mi corazón, y siento que incluso los minutos más simples se vuelven extraordinarios cuando los paso a tu lado.</p><br>
+    <p>Sueño con nuestro futuro juntos: caminatas al atardecer mientras nuestras manos se entrelazan, noches estrelladas abrazados sin necesidad de hablar, aventuras que solo nosotros entendemos y risas que llenen hasta el último rincón de nuestra vida. Quiero ser tu refugio en los días difíciles, tu compañero en cada alegría, tu amigo en cada locura y tu amor incondicional en cada instante. Quiero verte crecer, acompañarte en tus sueños y celebrar cada logro a tu lado, porque todo lo que eres merece ser celebrado con la mayor devoción.</p><br>
+    <p>Te amo profundamente, más de lo que las palabras pueden expresar, y cada día que pasa siento que este amor crece y se fortalece. Gracias por elegirme, por dejarme amarte de esta manera tan pura y hermosa, y por enseñarme a ser mejor cada día. No hay nada en el mundo que desee más que verte feliz y saber que estoy contribuyendo a esa felicidad. Eres mi alegría constante, mi inspiración diaria y mi razón de sonreír incluso en los días grises.</p><br>
+    <p>Quiero que sepas que cada latido de mi corazón late por ti, que cada pensamiento tiene un espacio reservado para ti, y que cada sueño que tengo incluye tu presencia. No importa la distancia ni los obstáculos, porque sé que lo que tenemos es más fuerte que todo. Contigo aprendí que el amor no se mide en tiempo, sino en intensidad, en sinceridad y en el deseo constante de cuidar y valorar al otro.</p><br>
+    <p>Siempre tuyo, con todo mi corazón y todo mi amor.</p>
+    <p> - Tu novio &lt;3</p>
+  </div>
+</section>
 
-        // --- Funciones para crear elementos (sin cambios) ---
-        function createStar() {
-            const star = document.createElement('div');
-            star.className = 'star';
-            const size = Math.random() * 2 + 1;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            setRandomPosition(star);
-            star.style.animationDuration = `${Math.random() * 2 + 1}s`;
-            star.addEventListener('animationend', () => {
-                setRandomPosition(star);
-                star.style.animation = 'none';
-                void star.offsetWidth;
-                star.style.animation = null;
-            });
-            return star;
-        }
+<script>
+const sky = document.querySelector('.sky-container');
 
-        function createFirefly() {
-            const firefly = document.createElement('div');
-            firefly.className = 'firefly';
-            const size = Math.random() * 3 + 2;
-            firefly.style.width = `${size}px`;
-            firefly.style.height = `${size}px`;
-            firefly.style.left = `${Math.random() * 100}vw`;
-            firefly.style.top = `${Math.random() * 100}vh`;
+// utilidades
+function rand(min,max){ return Math.random()*(max-min)+min; }
+function setRandomPosition(el){ el.style.left = rand(0,100)+'vw'; el.style.top = rand(0,100)+'vh'; }
 
-            // Aquí se ajusta la duración y el retardo para la animación de movimiento
-            firefly.style.animationDuration = `${Math.random() * 5 + 5}s, ${Math.random() * 10 + 10}s`;
-            firefly.style.animationDelay = `-${Math.random() * 5}s, -${Math.random() * 10}s`;
-            
-            return firefly;
-        }
+// estrellas
+function createStar(){
+  const s = document.createElement('div'); 
+  s.className = 'star'; 
+  const size = rand(1,3); 
+  s.style.width = size+'px'; 
+  s.style.height = size+'px'; 
+  setRandomPosition(s); 
+  s.style.animationDuration = rand(1.2,3)+'s'; 
+  return s;
+}
 
-        function createComet() {
-            const comet = document.createElement('div');
-            comet.className = 'comet';
+// luciérnagas
+function createFirefly(){
+  const f = document.createElement('div');
+  f.className = 'firefly';
+  const size = rand(2,5);
+  f.style.width = size+'px';
+  f.style.height = size+'px';
+  setRandomPosition(f);
+  const glow = rand(5,10)+'s';
+  const move = rand(10,20)+'s';
+  f.style.animationDuration = `${glow}, ${move}`;
+  return f;
+}
 
-            let startX, startY, endX, endY;
-            const side = Math.floor(Math.random() * 4);
-            switch (side) {
-                case 0:
-                    startX = Math.random() * 100;
-                    startY = -10;
-                    endX = Math.random() * 100;
-                    endY = 110;
-                    break;
-                case 1:
-                    startX = 110;
-                    startY = Math.random() * 100;
-                    endX = -10;
-                    endY = Math.random() * 100;
-                    break;
-                case 2:
-                    startX = Math.random() * 100;
-                    startY = 110;
-                    endX = Math.random() * 100;
-                    endY = -10;
-                    break;
-                case 3:
-                    startX = -10;
-                    startY = Math.random() * 100;
-                    endX = 110;
-                    endY = Math.random() * 100;
-                    break;
-            }
+// cometas
+function createComet(){
+  const c = document.createElement('div');
+  c.className = 'comet';
+  const startX = rand(-10,110), startY = rand(-10,110);
+  const endX = rand(-10,110), endY = rand(-10,110);
+  const angle = Math.atan2(endY-startY,endX-startX)*180/Math.PI;
+  c.style.setProperty('--start-x',startX);
+  c.style.setProperty('--start-y',startY);
+  c.style.setProperty('--end-x',endX);
+  c.style.setProperty('--end-y',endY);
+  c.style.setProperty('--angle',angle+'deg');
+  c.style.setProperty('--tail-length',rand(70,170)+'px');
+  return c;
+}
 
-            const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
-            const shootDuration = `${Math.random() * 6 + 4}s`;
-            const flickerDuration = `${Math.random() * 0.5 + 0.1}s`;
+// generacion
+for(let i=0;i<100;i++){ sky.appendChild(createStar()); }
+for(let i=0;i<20;i++){ sky.appendChild(createFirefly()); }
+for(let i=0;i<3;i++){ sky.appendChild(createComet()); }
 
-            comet.style.setProperty('--start-x', startX);
-            comet.style.setProperty('--start-y', startY);
-            comet.style.setProperty('--end-x', endX);
-            comet.style.setProperty('--end-y', endY);
-            comet.style.setProperty('--angle', `${angle}deg`);
-            comet.style.setProperty('--tail-length', `${Math.random() * 100 + 70}px`);
-
-            comet.style.animationDuration = `${shootDuration}, ${flickerDuration}`;
-            comet.style.animationDelay = `${Math.random() * 15}s, 0s`;
-            
-            return comet;
-        }
-
-        // --- Funciones de utilidad ---
-        function setRandomPosition(element) {
-            const x = Math.random() * 100;
-            const y = Math.random() * 100;
-            element.style.left = `${x}vw`;
-            element.style.top = `${y}vh`;
-        }
-
-        // --- Generar elementos ---
-        for (let i = 0; i < numStars; i++) {
-            skyContainer.appendChild(createStar());
-        }
-        // Se generan las luciérnagas sin la lógica compleja
-        for (let i = 0; i < numFireflies; i++) {
-            skyContainer.appendChild(createFirefly());
-        }
-
-        for (let i = 0; i < numComets; i++) {
-            skyContainer.appendChild(createComet());
-        }
-    </script>
+</script>
 </body>
 </html>
