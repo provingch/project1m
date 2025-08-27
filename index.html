@@ -1,430 +1,405 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>my love <3</title>
-    <style>
-        body {
-            background: #10103a;
-            margin: 0;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: center;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>my love <3</title>
+    <style>
+        body {
+            background: #10103a;
+            margin: 0;
+            overflow-x: hidden;
+            /* Se elimina 'height: 100vh' y 'display: flex' para permitir el scroll */
+        }
 
-        .main-scene {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            z-index: 1;
-        }
+        .main-scene {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
 
-        /* Contenedor del cielo */
-        .sky-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
+        /* Contenedor del cielo */
+        .sky-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
 
-        /* Luna - izquierda */
-        .moon {
-            position: absolute;
-            top: 10%;
-            left: 15%; /* Movida a la izquierda */
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle at 30% 30%, #f0f0f0, #ccc, #888);
-            border-radius: 50%;
-            box-shadow: 0 0 30px 10px rgba(255, 255, 200, 0.6),
-                        inset 0 0 10px rgba(0,0,0,0.3);
-            z-index: 5;
-        }
-        
-        /* Contenedor del suelo - más bajo para efecto 2D */
-        .ground-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 25vh; /* Altura reducida para un efecto más 2D */
-            z-index: 10;
-        }
+        /* Luna */
+        .moon {
+            position: absolute;
+            top: 10%;
+            left: 15%;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 30% 30%, #f0f0f0, #ccc, #888);
+            border-radius: 50%;
+            box-shadow: 0 0 30px 10px rgba(255, 255, 200, 0.6),
+                        inset 0 0 10px rgba(0,0,0,0.3);
+            z-index: 5;
+        }
+        
+        /* Contenedor del suelo */
+        .ground-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 25vh;
+            z-index: 10;
+        }
 
-        /* Pasto animado con silueta 2D - Fondo negro puro, sin sombras */
-        .animated-grass {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000; /* Fondo negro puro */
-            transform-origin: bottom;
-            animation: grass-sway 5s ease-in-out infinite;
-            z-index: 10;
-        }
+        /* Pasto animado */
+        .animated-grass {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            transform-origin: bottom;
+            animation: grass-sway 5s ease-in-out infinite;
+            z-index: 10;
+        }
 
-        /* Creamos la silueta irregular del pasto con un pseudo-elemento */
-        .animated-grass::before {
-            content: '';
-            position: absolute;
-            bottom: 100%;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: #000; /* Mismo color negro que el pasto principal */
-            clip-path: polygon(
-                0 100%, 10% 80%, 15% 95%, 20% 75%, 30% 90%, 35% 85%, 45% 98%, 50% 70%,
-                60% 92%, 65% 88%, 75% 100%, 80% 85%, 90% 95%, 100% 70%, 100% 100%
-            );
-        }
-        
-        /* Keyframes para el movimiento de balanceo */
-        @keyframes grass-sway {
-            0% { transform: scaleX(1) translateY(0); }
-            50% { transform: scaleX(1.01) translateY(-1px); }
-            100% { transform: scaleX(1) translateY(0); }
-        }
+        .animated-grass::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: #000;
+            clip-path: polygon(
+                0 100%, 10% 80%, 15% 95%, 20% 75%, 30% 90%, 35% 85%, 45% 98%, 50% 70%,
+                60% 92%, 65% 88%, 75% 100%, 80% 85%, 90% 95%, 100% 70%, 100% 100%
+            );
+        }
+        
+        @keyframes grass-sway {
+            0% { transform: scaleX(1) translateY(0); }
+            50% { transform: scaleX(1.01) translateY(-1px); }
+            100% { transform: scaleX(1) translateY(0); }
+        }
 
-        /* Colina sin pasto - Ahora a la izquierda y con fondo negro puro */
-        .hill-top {
-            position: absolute;
-            bottom: 8vh; /* Ajustado para estar sobre el pasto */
-            left: 15%; /* Movida a la izquierda */
-            transform: translateX(-50%); /* Ajuste para centrar en el nuevo 'left' */
-            width: 300px;
-            height: 60px;
-            background: #000; /* Fondo negro puro */
-            border-radius: 50% / 100% 100% 0 0;
-            z-index: 11;
-        }
+        /* Colina */
+        .hill-top {
+            position: absolute;
+            bottom: 8vh;
+            left: 15%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 60px;
+            background: #000;
+            border-radius: 50% / 100% 100% 0 0;
+            z-index: 11;
+        }
 
-        /* Silueta de las dos personas - Ahora a la izquierda, sin filtro de sombra */
-        .people-silhouette {
-            position: absolute;
-            bottom: 7vh; /* Ajustado para estar sobre la colina */
-            left: 50%; /* Movida a la izquierda, siguiendo la colina */
-            transform: translateX(-50%); /* Ajuste para centrar en el nuevo 'left' */
-            width: 360px;
-            height: auto;
-            z-index: 12;
-        }
-        
-        /* Estrellas y resto de animaciones... */
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation-name: twinkle;
-            animation-iteration-count: infinite;
-            animation-timing-function: ease-in-out;
-            animation-fill-mode: forwards;
-        }
+        /* Silueta de las dos personas */
+        .people-silhouette {
+            position: absolute;
+            bottom: 7vh;
+            /* Se ajusta 'left' para evitar que se salga de la pantalla en móviles */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 360px;
+            height: auto;
+            z-index: 12;
+        }
+        
+        /* Estrellas */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation-name: twinkle;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+            animation-fill-mode: forwards;
+        }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
-        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
 
-        .firefly {
-            position: absolute;
-            background: yellow;
-            border-radius: 50%;
-            box-shadow: 0 0 8px 2px rgba(255, 255, 0, 0.7);
-            animation-name: firefly-glow, firefly-move;
-            animation-iteration-count: infinite, infinite;
-            animation-timing-function: alternate, linear;
-            animation-fill-mode: forwards, forwards;
-        }
+        /* Luciérnagas */
+        .firefly {
+            position: absolute;
+            background: yellow;
+            border-radius: 50%;
+            box-shadow: 0 0 8px 2px rgba(255, 255, 0, 0.7);
+            animation-name: firefly-glow, firefly-move;
+            animation-iteration-count: infinite, infinite;
+            animation-timing-function: alternate, linear;
+            animation-fill-mode: forwards, forwards;
+        }
 
-        @keyframes firefly-glow {
-            0% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0.2; transform: scale(0.8); }
-        }
-        
-        .comet {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8);
-            opacity: 0;
-            animation-name: shoot-comet, comet-flicker;
-            animation-iteration-count: infinite, infinite;
-            animation-timing-function: linear, linear;
-            animation-fill-mode: forwards, forwards;
-            z-index: 10;
-            transform-origin: center center;
-            filter: blur(0.5px);
-        }
+        @keyframes firefly-glow {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.2; transform: scale(0.8); }
+        }
+        
+        /* Cometas */
+        .comet {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            animation-name: shoot-comet, comet-flicker;
+            animation-iteration-count: infinite, infinite;
+            animation-timing-function: linear, linear;
+            animation-fill-mode: forwards, forwards;
+            z-index: 10;
+            transform-origin: center center;
+            filter: blur(0.5px);
+        }
 
-        @keyframes comet-flicker {
-            0%, 100% { box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8); }
-            50% { box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.6); }
-        }
+        @keyframes comet-flicker {
+            0%, 100% { box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8); }
+            50% { box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.6); }
+        }
 
-        .comet::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: var(--tail-length);
-            height: 4px;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 20%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
-            transform: translateY(-50%) rotateY(180deg) scaleX(1);
-            transform-origin: left center;
-            filter: blur(1.5px);
-            border-radius: 50%;
-            animation: comet-flicker linear infinite;
-        }
-        
-        @keyframes shoot-comet {
-            0% {
-                transform: translate(calc(var(--start-x) * 1vw), calc(var(--start-y) * 1vh)) rotate(var(--angle));
-                opacity: 0;
-            }
-            1% {
-                opacity: 1;
-                transform: translate(calc(var(--start-x) * 1vw), calc(var(--start-y) * 1vh)) rotate(var(--angle));
-            }
-            50% {
-                transform: translate(calc(var(--end-x) * 1vw), calc(var(--end-y) * 1vh)) rotate(var(--angle));
-                opacity: 1;
-            }
-            51% {
-                opacity: 0;
-                transform: translate(calc(var(--end-x) * 1vw), calc(var(--end-y) * 1vh)) rotate(var(--angle));
-            }
-            100% {
-                opacity: 0;
-                transform: translate(calc(var(--end-x) * 1vw), calc(var(--end-y) * 1vh)) rotate(var(--angle));
-            }
-        }
+        .comet::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: var(--tail-length);
+            height: 4px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 20%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: translateY(-50%) rotateY(180deg) scaleX(1);
+            transform-origin: left center;
+            filter: blur(1.5px);
+            border-radius: 50%;
+            animation: comet-flicker linear infinite;
+        }
+        
+        @keyframes shoot-comet {
+            0% {
+                transform: translate(calc(var(--start-x) * 1vw), calc(var(--start-y) * 1vh)) rotate(var(--angle));
+                opacity: 0;
+            }
+            1% {
+                opacity: 1;
+                transform: translate(calc(var(--start-x) * 1vw), calc(var(--start-y) * 1vh)) rotate(var(--angle));
+            }
+            50% {
+                transform: translate(calc(var(--end-x) * 1vw), calc(var(--end-y) * 1vh)) rotate(var(--angle));
+                opacity: 1;
+            }
+            51% {
+                opacity: 0;
+                transform: translate(calc(var(--end-x) * 1vw), calc(var(--end-y) * 1vh)) rotate(var(--angle));
+            }
+            100% {
+                opacity: 0;
+                transform: translate(calc(var(--end-x) * 1vw), calc(var(--end-y) * 1vh)) rotate(var(--angle));
+            }
+        }
 
-        .message-container {
-            width: 100%;
-            height: 100vh;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
+        .message-container {
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            /* Ahora se ubica debajo de la escena principal */
+            position: relative;
+            z-index: 2; /* Para que quede encima de las animaciones del cielo si se superponen */
+        }
 
-        .message-box {
-            width: 80%;
-            max-width: 600px;
-            color: white;
-            text-align: center;
-            position: relative;
-            font-family: 'Arial', sans-serif;
-            font-size: 1.5em;
-            line-height: 1.6;
-            animation: text-morph 5s infinite alternate ease-in-out;
-        }
+        .message-box {
+            width: 80%;
+            max-width: 600px;
+            color: white;
+            text-align: center;
+            position: relative;
+            font-family: 'Arial', sans-serif;
+            font-size: 1.5em;
+            line-height: 1.6;
+            /* Se elimina 'animation' para dejar el texto estático */
+        }
+        /* Se elimina el keyframe '@keyframes text-morph' ya que no se usa */
 
-        @keyframes text-morph {
-            0% {
-                transform: scale(1) skew(0deg);
-                filter: hue-rotate(0deg);
-            }
-            25% {
-                transform: scale(1.01) skew(-0.5deg);
-                filter: hue-rotate(5deg);
-            }
-            50% {
-                transform: scale(1) skew(0deg);
-                filter: hue-rotate(0deg);
-            }
-            75% {
-                transform: scale(1.01) skew(0.5deg);
-                filter: hue-rotate(-5deg);
-            }
-            100% {
-                transform: scale(1) skew(0deg);
-                filter: hue-rotate(0deg);
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .moon {
-                width: 100px;
-                height: 100px;
-                top: 15%;
-                left: 40%; /* Movida más a la izquierda en pantallas pequeñas */
-            }
+        @media (max-width: 600px) {
+            .moon {
+                width: 100px;
+                height: 100px;
+                top: 15%;
+                left: 40%;
+            }
 
-            .hill-top {
-                width: 200px;
-                height: 40px;
-                bottom: 5vh; /* Ajustado para estar sobre el pasto en pantallas pequeñas */
-                left: 50%; /* Centrado en pantallas pequeñas */
-            }
+            .hill-top {
+                width: 200px;
+                height: 40px;
+                bottom: 5vh;
+                left: 50%;
+            }
 
-            .people-silhouette {
-                width: 320px;
-                bottom: 10vh; /* Ajustado para estar sobre la colina en pantallas pequeñas */
-                left: 50%; /* Centrado en pantallas pequeñas */
-            }
-            .message-box {
-                font-size: 1.1em;
-            }
-        }
-    </style>
+            .people-silhouette {
+                width: 320px;
+                bottom: 10vh;
+                left: 50%;
+            }
+            .message-box {
+                font-size: 1.1em;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="main-scene">
-        <div class="sky-container"></div>
-        <div class="moon"></div>
-        
-        <div class="ground-container">
-            <div class="animated-grass"></div>
-            <div class="hill-top"></div>
-            <img class="people-silhouette" src="personas.png" alt="Silueta de dos personas sentadas">
-        </div>
-    </div>
+    <div class="main-scene">
+        <div class="sky-container"></div>
+        <div class="moon"></div>
+        
+        <div class="ground-container">
+            <div class="animated-grass"></div>
+            <div class="hill-top"></div>
+            <img class="people-silhouette" src="personas.png" alt="Silueta de dos personas sentadas">
+        </div>
+    </div>
 
-    <div class="message-container">
-        <div class="message-box">
-            <p>Hola mi amor, te amo mucho. Eres la luna en mi cielo y las estrellas que me guían...</p>
-        </div>
-    </div>
-    
-    <script>
-        const skyContainer = document.querySelector('.sky-container');
-        const numStars = 100;
-        const numFireflies = 20;
-        const numComets = 3;
+    <div class="message-container">
+        <div class="message-box">
+            <p>Hola mi amor, te amo mucho. Eres la luna en mi cielo y las estrellas que me guían...</p>
+        </div>
+    </div>
+    
+    <script>
+        const skyContainer = document.querySelector('.sky-container');
+        const numStars = 100;
+        const numFireflies = 20;
+        const numComets = 3;
 
-        // --- Funciones para crear elementos (sin cambios) ---
-        function createStar() {
-            const star = document.createElement('div');
-            star.className = 'star';
-            const size = Math.random() * 2 + 1;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            setRandomPosition(star);
-            star.style.animationDuration = `${Math.random() * 2 + 1}s`;
-            star.addEventListener('animationend', () => {
-                setRandomPosition(star);
-                star.style.animation = 'none';
-                void star.offsetWidth;
-                star.style.animation = null;
-            });
-            return star;
-        }
+        // --- Funciones para crear elementos (sin cambios) ---
+        function createStar() {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 2 + 1;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            setRandomPosition(star);
+            star.style.animationDuration = `${Math.random() * 2 + 1}s`;
+            star.addEventListener('animationend', () => {
+                setRandomPosition(star);
+                star.style.animation = 'none';
+                void star.offsetWidth;
+                star.style.animation = null;
+            });
+            return star;
+        }
 
-        function createFirefly() {
-            const firefly = document.createElement('div');
-            firefly.className = 'firefly';
-            const size = Math.random() * 3 + 2;
-            firefly.style.width = `${size}px`;
-            firefly.style.height = `${size}px`;
-            firefly.style.left = `${Math.random() * 100}vw`;
-            firefly.style.top = `${Math.random() * 100}vh`;
+        function createFirefly() {
+            const firefly = document.createElement('div');
+            firefly.className = 'firefly';
+            const size = Math.random() * 3 + 2;
+            firefly.style.width = `${size}px`;
+            firefly.style.height = `${size}px`;
+            firefly.style.left = `${Math.random() * 100}vw`;
+            firefly.style.top = `${Math.random() * 100}vh`;
 
-            firefly.style.animationDuration = `${Math.random() * 5 + 5}s, ${Math.random() * 10 + 10}s`;
-            firefly.style.animationDelay = `-${Math.random() * 5}s, -${Math.random() * 10}s`;
+            firefly.style.animationDuration = `${Math.random() * 5 + 5}s, ${Math.random() * 10 + 10}s`;
+            firefly.style.animationDelay = `-${Math.random() * 5}s, -${Math.random() * 10}s`;
 
-            const styleSheet = document.styleSheets[0];
-            const ruleName = `firefly-move-${Date.now()}`;
-            styleSheet.insertRule(`
-                @keyframes ${ruleName} {
-                    0% { transform: translate(0, 0); }
-                    25% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
-                    50% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
-                    75% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
-                    100% { transform: translate(0, 0); }
-                }
-            `, styleSheet.cssRules.length);
-            
-            firefly.style.animationName = `firefly-glow, ${ruleName}`;
-            firefly.style.animationIterationCount = 'infinite, infinite';
-            firefly.style.animationTimingFunction = 'alternate, linear';
+            const styleSheet = document.styleSheets[0];
+            const ruleName = `firefly-move-${Date.now()}`;
+            styleSheet.insertRule(`
+                @keyframes ${ruleName} {
+                    0% { transform: translate(0, 0); }
+                    25% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
+                    50% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
+                    75% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
+                    100% { transform: translate(0, 0); }
+                }
+            `, styleSheet.cssRules.length);
+            
+            firefly.style.animationName = `firefly-glow, ${ruleName}`;
+            firefly.style.animationIterationCount = 'infinite, infinite';
+            firefly.style.animationTimingFunction = 'alternate, linear';
 
-            return firefly;
-        }
+            return firefly;
+        }
 
-        function createComet() {
-            const comet = document.createElement('div');
-            comet.className = 'comet';
+        function createComet() {
+            const comet = document.createElement('div');
+            comet.className = 'comet';
 
-            let startX, startY, endX, endY;
-            const side = Math.floor(Math.random() * 4);
-            switch (side) {
-                case 0:
-                    startX = Math.random() * 100;
-                    startY = -10;
-                    endX = Math.random() * 100;
-                    endY = 110;
-                    break;
-                case 1:
-                    startX = 110;
-                    startY = Math.random() * 100;
-                    endX = -10;
-                    endY = Math.random() * 100;
-                    break;
-                case 2:
-                    startX = Math.random() * 100;
-                    startY = 110;
-                    endX = Math.random() * 100;
-                    endY = -10;
-                    break;
-                case 3:
-                    startX = -10;
-                    startY = Math.random() * 100;
-                    endX = 110;
-                    endY = Math.random() * 100;
-                    break;
-            }
+            let startX, startY, endX, endY;
+            const side = Math.floor(Math.random() * 4);
+            switch (side) {
+                case 0:
+                    startX = Math.random() * 100;
+                    startY = -10;
+                    endX = Math.random() * 100;
+                    endY = 110;
+                    break;
+                case 1:
+                    startX = 110;
+                    startY = Math.random() * 100;
+                    endX = -10;
+                    endY = Math.random() * 100;
+                    break;
+                case 2:
+                    startX = Math.random() * 100;
+                    startY = 110;
+                    endX = Math.random() * 100;
+                    endY = -10;
+                    break;
+                case 3:
+                    startX = -10;
+                    startY = Math.random() * 100;
+                    endX = 110;
+                    endY = Math.random() * 100;
+                    break;
+            }
 
-            const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
-            const shootDuration = `${Math.random() * 6 + 4}s`;
-            const flickerDuration = `${Math.random() * 0.5 + 0.1}s`;
+            const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+            const shootDuration = `${Math.random() * 6 + 4}s`;
+            const flickerDuration = `${Math.random() * 0.5 + 0.1}s`;
 
-            comet.style.setProperty('--start-x', startX);
-            comet.style.setProperty('--start-y', startY);
-            comet.style.setProperty('--end-x', endX);
-            comet.style.setProperty('--end-y', endY);
-            comet.style.setProperty('--angle', `${angle}deg`);
-            comet.style.setProperty('--tail-length', `${Math.random() * 100 + 70}px`);
+            comet.style.setProperty('--start-x', startX);
+            comet.style.setProperty('--start-y', startY);
+            comet.style.setProperty('--end-x', endX);
+            comet.style.setProperty('--end-y', endY);
+            comet.style.setProperty('--angle', `${angle}deg`);
+            comet.style.setProperty('--tail-length', `${Math.random() * 100 + 70}px`);
 
-            comet.style.animationDuration = `${shootDuration}, ${flickerDuration}`;
-            comet.style.animationDelay = `${Math.random() * 15}s, 0s`;
-            
-            return comet;
-        }
+            comet.style.animationDuration = `${shootDuration}, ${flickerDuration}`;
+            comet.style.animationDelay = `${Math.random() * 15}s, 0s`;
+            
+            return comet;
+        }
 
-        // --- Funciones de utilidad ---
-        function setRandomPosition(element) {
-            const x = Math.random() * 100;
-            const y = Math.random() * 100;
-            element.style.left = `${x}vw`;
-            element.style.top = `${y}vh`;
-        }
+        // --- Funciones de utilidad ---
+        function setRandomPosition(element) {
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            element.style.left = `${x}vw`;
+            element.style.top = `${y}vh`;
+        }
 
-        // --- Generar elementos ---
-        for (let i = 0; i < numStars; i++) {
-            skyContainer.appendChild(createStar());
-        }
+        // --- Generar elementos ---
+        for (let i = 0; i < numStars; i++) {
+            skyContainer.appendChild(createStar());
+        }
 
-        for (let i = 0; i < numFireflies; i++) {
-            skyContainer.appendChild(createFirefly());
-        }
+        for (let i = 0; i < numFireflies; i++) {
+            skyContainer.appendChild(createFirefly());
+        }
 
-        for (let i = 0; i < numComets; i++) {
-            skyContainer.appendChild(createComet());
-        }
-    </script>
+        for (let i = 0; i < numComets; i++) {
+            skyContainer.appendChild(createComet());
+        }
+    </script>
 </body>
 </html>
-
-
