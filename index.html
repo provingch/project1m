@@ -16,6 +16,13 @@
             align-items: center;
         }
 
+        .main-scene {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
         /* Contenedor del cielo */
         .sky-container {
             position: absolute;
@@ -202,16 +209,26 @@
             }
         }
 
+        .message-container {
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
         .message-box {
             width: 80%;
             max-width: 600px;
             color: white;
             text-align: center;
             position: relative;
-            font-family: 'Arial', sans-serif; /* Puedes usar cualquier fuente, pero una sin serifa funciona bien */
+            font-family: 'Arial', sans-serif;
             font-size: 1.5em;
             line-height: 1.6;
-            animation: text-morph 5s infinite alternate ease-in-out; /* Animación en bucle */
+            animation: text-morph 5s infinite alternate ease-in-out;
         }
 
         @keyframes text-morph {
@@ -264,15 +281,15 @@
     </style>
 </head>
 <body>
-    <div class="sky-container"></div>
-    <div class="moon"></div>
-    
-    <div class="ground-container">
-        <div class="animated-grass"></div>
+    <div class="main-scene">
+        <div class="sky-container"></div>
+        <div class="moon"></div>
         
-        <div class="hill-top"></div>
-
-        <img class="people-silhouette" src="personas.png" alt="Silueta de dos personas sentadas">
+        <div class="ground-container">
+            <div class="animated-grass"></div>
+            <div class="hill-top"></div>
+            <img class="people-silhouette" src="personas.png" alt="Silueta de dos personas sentadas">
+        </div>
     </div>
 
     <div class="message-container">
@@ -408,6 +425,6 @@
         }
     </script>
 </body>
-
 </html>
+
 
