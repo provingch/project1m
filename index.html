@@ -9,7 +9,6 @@
             background: #10103a;
             margin: 0;
             overflow-x: hidden;
-            /* Se elimina 'height: 100vh' y 'display: flex' para permitir el scroll */
         }
 
         .main-scene {
@@ -102,9 +101,8 @@
         .people-silhouette {
             position: absolute;
             bottom: 7vh;
-            /* Se ajusta 'left' para evitar que se salga de la pantalla en móviles */
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%);
             width: 360px;
             height: auto;
             z-index: 12;
@@ -143,7 +141,16 @@
             50% { opacity: 1; transform: scale(1); }
             100% { opacity: 0.2; transform: scale(0.8); }
         }
-        
+        
+        /* Nuevo keyframe para el movimiento de las luciérnagas */
+        @keyframes firefly-move {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-10px, 20px); }
+            50% { transform: translate(50px, -30px); }
+            75% { transform: translate(-40px, 15px); }
+            100% { transform: translate(0, 0); }
+        }
+
         /* Cometas */
         .comet {
             position: absolute;
@@ -213,9 +220,8 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            /* Ahora se ubica debajo de la escena principal */
             position: relative;
-            z-index: 2; /* Para que quede encima de las animaciones del cielo si se superponen */
+            z-index: 2;
         }
 
         .message-box {
@@ -227,10 +233,8 @@
             font-family: 'Arial', sans-serif;
             font-size: 1.5em;
             line-height: 1.6;
-            /* Se elimina 'animation' para dejar el texto estático */
         }
-        /* Se elimina el keyframe '@keyframes text-morph' ya que no se usa */
-
+        
         @media (max-width: 600px) {
             .moon {
                 width: 100px;
@@ -308,25 +312,10 @@
             firefly.style.left = `${Math.random() * 100}vw`;
             firefly.style.top = `${Math.random() * 100}vh`;
 
+            // Aquí se ajusta la duración y el retardo para la animación de movimiento
             firefly.style.animationDuration = `${Math.random() * 5 + 5}s, ${Math.random() * 10 + 10}s`;
             firefly.style.animationDelay = `-${Math.random() * 5}s, -${Math.random() * 10}s`;
-
-            const styleSheet = document.styleSheets[0];
-            const ruleName = `firefly-move-${Date.now()}`;
-            styleSheet.insertRule(`
-                @keyframes ${ruleName} {
-                    0% { transform: translate(0, 0); }
-                    25% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
-                    50% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
-                    75% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
-                    100% { transform: translate(0, 0); }
-                }
-            `, styleSheet.cssRules.length);
-            
-            firefly.style.animationName = `firefly-glow, ${ruleName}`;
-            firefly.style.animationIterationCount = 'infinite, infinite';
-            firefly.style.animationTimingFunction = 'alternate, linear';
-
+            
             return firefly;
         }
 
@@ -392,7 +381,7 @@
         for (let i = 0; i < numStars; i++) {
             skyContainer.appendChild(createStar());
         }
-
+        // Se generan las luciérnagas sin la lógica compleja
         for (let i = 0; i < numFireflies; i++) {
             skyContainer.appendChild(createFirefly());
         }
