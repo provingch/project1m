@@ -101,7 +101,7 @@
         /* Silueta de las dos personas - Ahora a la izquierda, sin filtro de sombra */
         .people-silhouette {
             position: absolute;
-            bottom: 9vh; /* Ajustado para estar sobre la colina */
+            bottom: 7vh; /* Ajustado para estar sobre la colina */
             left: 50%; /* Movida a la izquierda, siguiendo la colina */
             transform: translateX(-50%); /* Ajuste para centrar en el nuevo 'left' */
             width: 360px;
@@ -201,6 +201,42 @@
                 transform: translate(calc(var(--end-x) * 1vw), calc(var(--end-y) * 1vh)) rotate(var(--angle));
             }
         }
+
+        .message-box {
+            width: 80%;
+            max-width: 600px;
+            color: white;
+            text-align: center;
+            position: relative;
+            font-family: 'Arial', sans-serif; /* Puedes usar cualquier fuente, pero una sin serifa funciona bien */
+            font-size: 1.5em;
+            line-height: 1.6;
+            animation: text-morph 5s infinite alternate ease-in-out; /* Animación en bucle */
+        }
+
+        @keyframes text-morph {
+            0% {
+                transform: scale(1) skew(0deg);
+                filter: hue-rotate(0deg);
+            }
+            25% {
+                transform: scale(1.01) skew(-0.5deg);
+                filter: hue-rotate(5deg);
+            }
+            50% {
+                transform: scale(1) skew(0deg);
+                filter: hue-rotate(0deg);
+            }
+            75% {
+                transform: scale(1.01) skew(0.5deg);
+                filter: hue-rotate(-5deg);
+            }
+            100% {
+                transform: scale(1) skew(0deg);
+                filter: hue-rotate(0deg);
+            }
+        }
+        
         @media (max-width: 600px) {
             .moon {
                 width: 100px;
@@ -221,6 +257,9 @@
                 bottom: 10vh; /* Ajustado para estar sobre la colina en pantallas pequeñas */
                 left: 50%; /* Centrado en pantallas pequeñas */
             }
+            .message-box {
+                font-size: 1.1em;
+            }
         }
     </style>
 </head>
@@ -236,6 +275,12 @@
         <img class="people-silhouette" src="personas.png" alt="Silueta de dos personas sentadas">
     </div>
 
+    <div class="message-container">
+        <div class="message-box">
+            <p>Hola mi amor, te amo mucho. Eres la luna en mi cielo y las estrellas que me guían...</p>
+        </div>
+    </div>
+    
     <script>
         const skyContainer = document.querySelector('.sky-container');
         const numStars = 100;
@@ -365,3 +410,4 @@
 </body>
 
 </html>
+
