@@ -163,6 +163,8 @@
     animation-fill-mode:forwards,forwards;
     transform-origin:center center;
     filter: blur(0.5px);
+    animation-duration: 6s, 0.3s;
+    animation-delay: 0s, 0s;
   }
 
   .comet::after {
@@ -180,6 +182,24 @@
     animation:comet-flicker linear infinite;
   }
 
+  @keyframes shoot-comet {
+    0% {
+      transform: translate(var(--start-x, 0)vw, var(--start-y, 0)vh) rotate(var(--angle, 0));
+      opacity: 0;
+    }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% {
+      transform: translate(var(--end-x, 100)vw, var(--end-y, 100)vh) rotate(var(--angle, 0));
+      opacity: 0;
+    }
+  }
+
+  @keyframes comet-flicker {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+
   /* ===== TEXTO ABAJO ===== */
   .text-box {
     width:100%;
@@ -193,6 +213,34 @@
   .text-box .inner { 
     max-width:900px; 
     margin:0 auto; 
+  }
+
+  /* ===== CORAZONCITOS ===== */
+  .heart {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    transform: rotate(-45deg);
+    animation: float-up 2s ease-out forwards;
+  }
+
+  .heart::before,
+  .heart::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 50%;
+  }
+
+  .heart::before { top: -10px; left: 0; }
+  .heart::after  { left: 10px; top: 0; }
+
+  @keyframes float-up {
+    0% { opacity: 1; transform: translate(0,0) rotate(-45deg) scale(1); }
+    100% { opacity: 0; transform: translate(0,-150px) rotate(-45deg) scale(1.5); }
   }
 
   /* ===== RESPONSIVE ===== */
@@ -232,6 +280,7 @@
 
 <script>
 const sky = document.querySelector('.sky-container');
+const silhouette = document.querySelector('.people-silhouette');
 
 // utilidades
 function rand(min,max){ return Math.random()*(max-min)+min; }
@@ -279,6 +328,21 @@ function createComet(){
   return c;
 }
 
+silhouette.addEventListener('click', (e) => {
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+
+  // posición inicial cerca del click
+  const rect = silhouette.getBoundingClientRect();
+  heart.style.left = (e.clientX - rect.left - 10) + 'px';
+  heart.style.top = (e.clientY - rect.top - 10) + 'px';
+
+  silhouette.parentElement.appendChild(heart);
+
+  // eliminar corazón después de la animación
+  setTimeout(() => heart.remove(), 2000);
+});
+
 // generacion
 for(let i=0;i<100;i++){ sky.appendChild(createStar()); }
 for(let i=0;i<20;i++){ sky.appendChild(createFirefly()); }
@@ -287,4 +351,5 @@ for(let i=0;i<3;i++){ sky.appendChild(createComet()); }
 </script>
 </body>
 </html>
+
 
