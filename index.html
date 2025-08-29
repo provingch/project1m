@@ -97,7 +97,7 @@
 
   .people-silhouette {
     position:absolute;
-    bottom:5.5vh; 
+    bottom:9vh; 
     left:50%;
     transform:translateX(-50%);
     width:360px; 
@@ -262,7 +262,7 @@
   @media (max-width: 600px) {
     .moon { width:100px; height:100px; top:10%; left:40%; }
     .hill-top { width:200px; height:40px; bottom:5vh; left:50%; transform:translateX(-50%); }
-    .people-silhouette { width:320px; bottom:7vh; left:50%; transform:translateX(-50%); }
+    .people-silhouette { width:320px; bottom:11.5vh; left:50%; transform:translateX(-50%); }
   }
 
 </style>
@@ -347,16 +347,19 @@ function createComet(){
   return c;
 }
 
-silhouette.addEventListener('click', (e) => {
+silhouette.addEventListener('click', () => {
   const heart = document.createElement('div');
   heart.className = 'heart';
 
-  // posición inicial cerca del click
+  // posición aleatoria dentro del bounding box de la silueta
   const rect = silhouette.getBoundingClientRect();
-  heart.style.left = (e.clientX - rect.left - 10) + 'px';
-  heart.style.top = (e.clientY - rect.top - 10) + 'px';
+  const randomX = Math.random() * rect.width;
+  const randomY = Math.random() * rect.height;
 
-  silhouette.parentElement.appendChild(heart);
+  heart.style.left = (rect.left + randomX) + 'px';
+  heart.style.top = (rect.top + randomY) + 'px';
+
+  document.body.appendChild(heart);
 
   // eliminar corazón después de la animación
   setTimeout(() => heart.remove(), 2000);
@@ -385,6 +388,7 @@ for(let i=0;i<3;i++){ sky.appendChild(createComet()); }
 </script>
 </body>
 </html>
+
 
 
 
