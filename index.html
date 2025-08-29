@@ -157,14 +157,9 @@
     border-radius:50%;
     box-shadow:0 0 15px 5px rgba(255,255,255,0.8); 
     opacity:0;
-    animation-name:shoot-comet, comet-flicker;
-    animation-iteration-count:infinite,infinite;
-    animation-timing-function:linear,linear;
-    animation-fill-mode:forwards,forwards;
+    animation:shoot-comet 6s linear infinite, comet-flicker 0.3s linear infinite;
     transform-origin:center center;
     filter: blur(0.5px);
-    animation-duration: 6s, 0.3s;
-    animation-delay: 0s, 0s;
   }
 
   .comet::after {
@@ -179,18 +174,17 @@
     transform-origin:left center;
     filter: blur(1.5px);
     border-radius:50%;
-    animation:comet-flicker linear infinite;
   }
 
   @keyframes shoot-comet {
     0% {
-      transform: translate(var(--start-x, 0)vw, var(--start-y, 0)vh) rotate(var(--angle, 0));
+      transform: translate(calc(var(--start-x) * 1vw), calc(var(--start-y) * 1vh)) rotate(var(--angle));
       opacity: 0;
     }
     10% { opacity: 1; }
     90% { opacity: 1; }
     100% {
-      transform: translate(var(--end-x, 100)vw, var(--end-y, 100)vh) rotate(var(--angle, 0));
+      transform: translate(calc(var(--end-x) * 1vw), calc(var(--end-y) * 1vh)) rotate(var(--angle));
       opacity: 0;
     }
   }
@@ -243,6 +237,27 @@
     100% { opacity: 0; transform: translate(0,-150px) rotate(-45deg) scale(1.5); }
   }
 
+  /* ===== SU FOTO (es dms linda me costo hacer esta parte) =====*/
+  .love-photo {
+    position: absolute;
+    top: 50%; 
+    left: 50%;
+    width: 200px; /* podés ajustar */
+    height: auto;
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(255,255,255,0.8);
+    transition: transform 0.6s ease, opacity 0.6s ease;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+  }
+  
+  .love-photo.show {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+
   /* ===== RESPONSIVE ===== */
   @media (max-width: 600px) {
     .moon { width:100px; height:100px; top:10%; left:40%; }
@@ -281,6 +296,7 @@
 <script>
 const sky = document.querySelector('.sky-container');
 const silhouette = document.querySelector('.people-silhouette');
+const moon = document.querySelector('.moon');
 
 // utilidades
 function rand(min,max){ return Math.random()*(max-min)+min; }
@@ -316,15 +332,18 @@ function createFirefly(){
 function createComet(){
   const c = document.createElement('div');
   c.className = 'comet';
+  
   const startX = rand(-10,110), startY = rand(-10,110);
   const endX = rand(-10,110), endY = rand(-10,110);
   const angle = Math.atan2(endY-startY,endX-startX)*180/Math.PI;
-  c.style.setProperty('--start-x',startX);
-  c.style.setProperty('--start-y',startY);
-  c.style.setProperty('--end-x',endX);
-  c.style.setProperty('--end-y',endY);
-  c.style.setProperty('--angle',angle+'deg');
-  c.style.setProperty('--tail-length',rand(70,170)+'px');
+  
+  c.style.setProperty('--start-x', startX);
+  c.style.setProperty('--start-y', startY);
+  c.style.setProperty('--end-x', endX);
+  c.style.setProperty('--end-y', endY);
+  c.style.setProperty('--angle', angle+'deg');
+  c.style.setProperty('--tail-length', rand(70,170)+'px');
+  
   return c;
 }
 
@@ -343,6 +362,21 @@ silhouette.addEventListener('click', (e) => {
   setTimeout(() => heart.remove(), 2000);
 });
 
+const photo = document.createElement('img');
+photo.src = 'sources/ella.png'; // poné la ruta de su foto
+photo.className = 'love-photo';
+document.body.appendChild(photo);
+
+moon.addEventListener('click', () => {
+  // toggle clase para aparecer/desaparecer
+  photo.classList.toggle('show');
+
+  // opcional: desaparecer después de 3 segundos
+  if(photo.classList.contains('show')){
+    setTimeout(() => photo.classList.remove('show'), 3000);
+  }
+});
+
 // generacion
 for(let i=0;i<100;i++){ sky.appendChild(createStar()); }
 for(let i=0;i<20;i++){ sky.appendChild(createFirefly()); }
@@ -351,5 +385,6 @@ for(let i=0;i<3;i++){ sky.appendChild(createComet()); }
 </script>
 </body>
 </html>
+
 
 
